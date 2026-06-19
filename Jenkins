@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        IMAGE_NAME = 'yourdockerhubuser/myapp'        // CHANGE THIS: your Docker Hub repo (user/repo)
+        IMAGE_NAME = 'rabin/cicdpipelinetest'        // CHANGE THIS: your Docker Hub repo (user/repo)
         DOCKERHUB  = credentials('dockerhub-creds')    // CHANGE THIS: your Docker Hub credential ID
         // Auto-derived: DOCKERHUB_USR and DOCKERHUB_PSW
     }

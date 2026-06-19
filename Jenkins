@@ -2,31 +2,25 @@ pipeline {
     agent any
 
     triggers {
-        // Jenkins checks Git every ~5 min; builds only when a new commit is found
         pollSCM('H/5 * * * *')
     }
 
     environment {
-        IMAGE_NAME = 'rabin/cicdpipelinetest'        // CHANGE THIS: your Docker Hub repo (user/repo)
-        DOCKERHUB  = credentials('dockerhub-creds')    // CHANGE THIS: your Docker Hub credential ID
-        // Auto-derived: DOCKERHUB_USR and DOCKERHUB_PSW
+        IMAGE_NAME = 'rabin/cicdpipelinetest'        // CHANGE THIS
+        DOCKERHUB  = credentials('dockerhub-creds')    // CHANGE THIS to your credential ID
     }
 
     stages {
         stage('Checkout') {
             steps {
-                checkout scm   // pulls the repo configured in "Pipeline script from SCM"
+                checkout scm
             }
         }
 
         stage('Build Image') {
             steps {
-                // If your Dockerfile is at the repo ROOT, use this:
                 bat 'docker build -t %IMAGE_NAME%:%BUILD_NUMBER% -t %IMAGE_NAME%:latest .'
-
-                // If Visual Studio put the Dockerfile in the PROJECT folder, comment the line
-                // above and use this instead (adjust the project path):
-                // bat 'docker build -t %IMAGE_NAME%:%BUILD_NUMBER% -t %IMAGE_NAME%:latest -f MyApi/Dockerfile .'
+                // VS layout? use: -f MyApi/Dockerfile .
             }
         }
 
@@ -36,17 +30,15 @@ pipeline {
                     echo %DOCKERHUB_PSW% | docker login -u %DOCKERHUB_USR% --password-stdin
                     docker push %IMAGE_NAME%:%BUILD_NUMBER%
                     docker push %IMAGE_NAME%:latest
+                    docker logout
                 '''
             }
         }
     }
 
     post {
-        always {
-            bat 'docker logout'
-        }
         success {
-            echo "Pushed %IMAGE_NAME%:%BUILD_NUMBER% and :latest to Docker Hub"
+            echo "Pushed ${IMAGE_NAME}:${BUILD_NUMBER} and :latest to Docker Hub"
         }
         failure {
             echo 'Build or push failed - check the stage logs above.'

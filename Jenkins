@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        IMAGE_NAME = 'rabin/cicdpipelinetest'        // CHANGE THIS
+        IMAGE_NAME = 'dev17aspl/cicdpipelinetest'        // CHANGE THIS
         DOCKERHUB  = credentials('dockerhub-creds')    // CHANGE THIS to your credential ID
     }
 

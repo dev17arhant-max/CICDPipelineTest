@@ -16,7 +16,7 @@ namespace CICDPipelineTest.Controllers
         [HttpGet("test1")]
         public IActionResult Test1()
         {
-            return Ok("hello this is CI CD testing part7");
+            return Ok("hello this is CI CD testing parttest");
         }
     }
 }

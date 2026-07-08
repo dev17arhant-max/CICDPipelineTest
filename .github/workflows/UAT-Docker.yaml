@@ -3,7 +3,7 @@ on:
   schedule:
     - cron: '18 6 * * *'
   push:
-    branches: [ "master" ]
+    branches: [ "master_uat" ]
     tags: [ 'v*.*.*' ]
   pull_request:
     branches: [ "master" ]
